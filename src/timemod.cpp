@@ -89,19 +89,6 @@ void editAdv(bool skip) {
 		ResetTBuf();
 		return;
 	}
-	if (skip) {
-		for (uchar seg = 0; seg < NO_OF_EDITING_SEGS; seg++) {
-			uchar next = editingBounds[seg] + editingLengths[seg];
-			if (editingIndex < next) {
-				if (t_index == 0) {
-					editingIndex = next;
-					if (seg < NO_OF_EDITING_SEGS - 1) return;
-				} else {
-					editingIndex = next - 1;
-				}
-			}
-		}
-	}
 
 	for (uchar seg = 0; seg < NO_OF_EDITING_SEGS; seg++) {
 		if (editingIndex == (editingBounds[seg] + editingLengths[seg] - 1)) {
@@ -127,6 +114,21 @@ void editAdv(bool skip) {
 			break;
 		}
 	}
+
+	if (skip) {
+		for (uchar seg = 0; seg < NO_OF_EDITING_SEGS; seg++) {
+			uchar next = editingBounds[seg] + editingLengths[seg];
+			if (editingIndex < next) {
+				if (t_index == 0) {
+					editingIndex = next;
+					if (seg < NO_OF_EDITING_SEGS - 1) return;
+				} else {
+					editingIndex = next - 1;
+				}
+			}
+		}
+	}
+
 	editingIndex++;
 
 	// check if finished editing
