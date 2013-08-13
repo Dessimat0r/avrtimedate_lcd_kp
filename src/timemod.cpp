@@ -92,24 +92,25 @@ void editAdv(bool skip) {
 
 	for (uchar seg = 0; seg < NO_OF_EDITING_SEGS; seg++) {
 		if (editingIndex == (editingBounds[seg] + editingLengths[seg] - 1)) {
+			bool pass = true;
 			int num = atoi(t_buf);
-			setTime(
-				seg == 0 ? num : hour(),
-				seg == 1 ? num : minute(),
-				seg == 2 ? num : second(),
-				seg == 3 ? num : day(),
-				seg == 4 ? num : month(),
-				seg == 5 ? num : year()
-			);
-			if (!checkTEdit(editingTElements[seg], atoi(t_buf))) {
+			if (seg == 4 && (num < 1 || num > 12)) pass = false;
+			if (pass) {
+				setTime(
+					seg == 0 ? num : hour(),
+					seg == 1 ? num : minute(),
+					seg == 2 ? num : second(),
+					seg == 3 ? num : day(),
+					seg == 4 ? num : month(),
+					seg == 5 ? num : year()
+				);
+				pass = checkTEdit(editingTElements[seg], atoi(t_buf));
+			}
+			ResetTBuf();
+			if (!pass) {
 				setTime(t_time);
-				if (!skip) {
-					editingIndex = editingBounds[seg];
-					ResetTBuf();
-					return;
-				}
-			} else {
-				ResetTBuf();
+				editingIndex = editingBounds[seg] + (skip ? editingLengths[seg] : 0);
+				return;
 			}
 			break;
 		}
@@ -134,8 +135,8 @@ void editAdv(bool skip) {
 	// check if finished editing
 	if (
 		editingIndex >=
-		editingBounds[NO_OF_EDITING_SEGS - 1] +
-		editingLengths[NO_OF_EDITING_SEGS - 1]
+		(editingBounds[NO_OF_EDITING_SEGS - 1] +
+		editingLengths[NO_OF_EDITING_SEGS - 1])
 	) {
 		ResetTBuf();
 		editingIndex = 0;
