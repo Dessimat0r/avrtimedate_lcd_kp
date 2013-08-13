@@ -158,11 +158,10 @@ void printSegment(const int segIndex) {
 		} else {
 			if (!t_index) {
 				sprintf(buf, normalFormats[segIndex], editingTFuns[segIndex]());
-				display.print(buf);
 			} else {
 				sprintf(buf, editingFormats[segIndex], t_buf);
-				display.print(buf);
 			}
+			display.print(buf);
 		}
 	} else {
 		sprintf(buf, normalFormats[segIndex], editingTFuns[segIndex]());
